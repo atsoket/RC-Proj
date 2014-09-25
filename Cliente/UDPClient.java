@@ -9,8 +9,8 @@ class UDPClient{
     
     public UDPClient(int porto, String servidor)throws SocketException, java.net.UnknownHostException{
             clientSocket = new DatagramSocket();
-	       // IPAddress = InetAddress.getByName(servidor);
-            IPAddress = InetAddress.getByName("localhost"); _porto = porto;
+	        IPAddress = InetAddress.getByName(servidor);
+            _porto = porto;
     }
 
     public void emEspera(String mensagem) throws IOException{

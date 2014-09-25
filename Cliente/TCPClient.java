@@ -8,34 +8,38 @@ class TCPClient{
     int _porto;
     int _cenas;
     String _ipServidor;
+    DataOutputStream outToServer;
     Socket clientSocket;
     
-    public UDPClient(int porto, String ipServidor)throws SocketException, java.net.UnknownHostException{
-            clientSocket = new DatagramSocket();
-	        _ipServidor = ipServidor;
+    public TCPClient(int porto, String ipServidor)throws SocketException, java.net.UnknownHostException{
+            _ipServidor = ipServidor;
             _porto = porto;
+            try{
+                    clientSocket = new Socket(_ipServidor , _porto);
+            }catch(IOException ex){
+                    System.out.println (ex.toString());
+                    System.out.println("Problema no _udpserv.emEspera(_listaConteudos);");
+            }
     }
+    
+    
 
-    public static void main(String args[]) throws IOException{
+    public void emEspera(String mensagem) throws IOException{
 
     String sentence;
     String modifiedSentence;
+    System.out.println ("mensagem: " + mensagem);
+    
 
-    while(true){  
-
-      BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in)); //MUDAR ESTA PORRA
-      clientSocket = new Socket(_ipServidor , _porto);
-      
-      
       DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-      
       BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-      sentence = inFromUser.readLine();
-      outToServer.writeBytes(sentence + '\n');
+  
+      
+      outToServer.writeBytes(mensagem);
       modifiedSentence = inFromServer.readLine();
       System.out.println("FROM SERVER: " + modifiedSentence);
       clientSocket.close();
       
-    }
+   
     }
 }
