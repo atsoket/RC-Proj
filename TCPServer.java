@@ -20,7 +20,7 @@ class TCPServer {
       	    clientSentence = inFromClient.readLine();
       	    
 			System.out.println("Received TCP: " + clientSentence);
-			if( sentence.contains("UPR ")){
+			if( clientSentence.contains("UPR ")){
                 System.out.println("pedido de ficheiro");          
             }
             

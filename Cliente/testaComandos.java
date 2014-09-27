@@ -36,14 +36,22 @@ public class testaComandos{
         
         public boolean testaEspaco(){
         
-            _comandoCortado = _comandoOriginal.trim().replaceAll("\\s+", " ");
-                
-            if( _comandoCortado.length() != _comandoOriginal.length() ){
-             System.out.println("\n" + _comandoCortado.length() + "\n" + _comandoOriginal.length());
-			    _comandoOriginal = _comandoCortado = null;
+           int tamanhoOriginal;
+           _comandoCortado = _comandoOriginal.trim().replaceAll("\\s+", " ");
+            
+           for (tamanhoOriginal = 0; tamanhoOriginal < _comandoOriginal.length(); tamanhoOriginal++){
+                  if( _comandoOriginal.charAt(tamanhoOriginal) == '\n') 
+                       break;
+           }
+           
+                                
+           if( _comandoCortado.length() != tamanhoOriginal ){
+                _comandoOriginal = _comandoCortado = null;
 			    _comandoBuffer = null;
 			    return false;
-	        }
+	       }
+	        
+	        _comandoOriginal = _comandoOriginal.trim().replaceAll("\n", "");
 	        _comandoArgs = _comandoOriginal.split(" ");
 	        return true;
         

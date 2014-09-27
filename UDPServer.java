@@ -34,11 +34,15 @@ public class UDPServer {
                    
                    if( sentence.contains("LST\n")){
                        /*AWL ip porta num  f1 f2*/
-                       String resposta = "AWL ";
+                       
+                       String resposta = "AWL 192.0.1.60 59000 2 f1 f2\n";
                        /*resposta += sserver.getIP();
                        resposta += sserver.getPorto();   //BORA BRUNO
                        resposta += getFicheirosNum();
                        resposta += getFicheirosLista();*/
+                       sendData = resposta.getBytes();
+                       DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+                       serverSocket.send(sendPacket);
                    }
                         
                    
