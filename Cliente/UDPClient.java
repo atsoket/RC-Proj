@@ -35,12 +35,12 @@ class UDPClient{
         clientSocket.receive(receivePacket);
         
         String modifiedSentence = new String(receivePacket.getData());
-        System.out.println("FROM SERVER:" + modifiedSentence);
+        //System.out.println("FROM SERVER:" + modifiedSentence);
         
         testaComandos comandos = new testaComandos();
         comandos.setComandos(modifiedSentence, modifiedSentence);
         
-        
+         System.out.println("ERR00");
         /*AWL ip porta num  f1 f2*/
         if( comandos.testaEspaco() )
             System.out.println("ERR");
@@ -54,6 +54,8 @@ class UDPClient{
                         i--;
                 }
         }
+        
+        
             clientSocket.close();
         
     }

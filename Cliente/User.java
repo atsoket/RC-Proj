@@ -83,7 +83,7 @@ public class User{
                                     break;
                                 case "upload": /*próxima merda a ser feita*/
                                     String[] argumentos = comandos.getArgs();
-                                    Thread tcp = new Thread( new threadTCP(servidor, porto, argumentos[1],  ));
+                                    Thread tcp = new Thread( new threadTCP(servidor, porto, argumentos[1]  ));
                                     tcp.start();
                                     System.out.println("comando UPL");
                                     //lançar TCP + args[1]

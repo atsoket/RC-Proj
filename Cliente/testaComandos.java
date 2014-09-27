@@ -39,6 +39,7 @@ public class testaComandos{
             _comandoCortado = _comandoOriginal.trim().replaceAll("\\s+", " ");
                 
             if( _comandoCortado.length() != _comandoOriginal.length() ){
+             System.out.println("\n" + _comandoCortado.length() + "\n" + _comandoOriginal.length());
 			    _comandoOriginal = _comandoCortado = null;
 			    _comandoBuffer = null;
 			    return false;
