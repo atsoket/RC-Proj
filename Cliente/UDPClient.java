@@ -13,10 +13,11 @@ class UDPClient{
             _porto = porto;
     }
 
-    public void emEspera(String mensagem) throws IOException{
+    public String[] emEspera(String mensagem) throws IOException{
        
         byte[] receiveData = new byte[1024];
         byte[] sendData = new byte[mensagem.getBytes().length];
+        String[] _aRetornar = {"", ""};
         sendData = mensagem.getBytes();  
         
         DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, _porto);
@@ -36,7 +37,8 @@ class UDPClient{
                 int nr=0, i;
                 String[] vectorResposta = comandos.getArgs();
                 i = Integer.parseInt(vectorResposta[3]);
-                
+                _aRetornar[0] = vectorResposta[1];
+                _aRetornar[1] = vectorResposta[2];
                 if( i == ( vectorResposta.length - 4 ) )			
                     while(i>0){
                         System.out.println( ++nr + " - " + vectorResposta[4+nr-1]);
@@ -47,8 +49,9 @@ class UDPClient{
                System.out.println("ERR");
         }
         
-        
+            
             clientSocket.close();
+            return _aRetornar;
         
     }
 }

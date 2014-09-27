@@ -7,14 +7,15 @@ import java.io.InputStreamReader;
 
 public class User{
 
-       public final static int NG = 58006;
-       //private int[] arrayIP;
+       
 
+       public final static int NG = 58006;
+       private static String[] arrayIP;
+       
        private static class threadUDP implements Runnable {
                 int _porto;
 		        String _servidor, _mensagem;
-                
-        
+                        
                 public threadUDP(String servidor, int porto, String mensagem){
                         _porto = porto;
                         _servidor = servidor;
@@ -24,7 +25,7 @@ public class User{
                 public void run() {
                         try{
                                 UDPClient _udpclient = new UDPClient(_porto, _servidor);
-                                _udpclient.emEspera(_mensagem);
+                                arrayIP = _udpclient.emEspera(_mensagem);
                         
                         }catch (SocketException e) {
                                 System.out.println("Problema no UDPCLient _udpserv = new UDPServer(porto);");
@@ -65,7 +66,9 @@ public class User{
                 
                 boolean acabou = false;
                 testaComandos comandos = new testaComandos();
+                String[] argumentos;
                 
+                int[] SS;
                 
                 while( !acabou ){
                         if(comandos.testa()){ //COMANDOS VÁLIDOS
@@ -77,14 +80,17 @@ public class User{
                                     System.out.println("comando LST");
                                    //lançar UDP
                                     break;
-                                case "retrieve":
+                                case "retrieve": /* retrieve file_name */
+                                    argumentos = comandos.getArgs();
+                                    Thread tcpR = new Thread( new threadTCP(arrayIP[0], Integer.parseInt(arrayIP[1]), ("retrieve " + argumentos[1])));
+                                    tcpR.start();
                                     System.out.println("comando REQ");
                                     //lançar TCP + args[1]
                                     break;
-                                case "upload": /*próxima merda a ser feita*/
-                                    String[] argumentos = comandos.getArgs();
-                                    Thread tcp = new Thread( new threadTCP(servidor, porto, argumentos[1]  ));
-                                    tcp.start();
+                                case "upload": /*  */
+                                    argumentos = comandos.getArgs();
+                                    Thread tcpU = new Thread( new threadTCP(servidor, porto, argumentos[1]  ));
+                                    tcpU.start();
                                     System.out.println("comando UPL");
                                     //lançar TCP + args[1]
                                     break;
