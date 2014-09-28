@@ -9,7 +9,7 @@ class TCPClient{
     int _cenas;
     String _ipServidor;
     DataOutputStream outToServer;
-  // BufferedReader inFromServer;
+    DataInputStream inFromServer;
     Socket clientSocket;
     
     public TCPClient(int porto, String ipServidor)throws SocketException, java.net.UnknownHostException{
@@ -24,7 +24,18 @@ class TCPClient{
             }
     }
     
-    
+    public byte[] leXBytes(int numBytes){
+        byte[] _resposta = new byte[numBytes];
+        
+        try{
+            for(int i = 0; i < numBytes; i++)
+	            _resposta[i] = inFromServer.readByte();
+	    }catch(IOException ex){
+                    System.out.println("Problema no readByte");
+            }
+	        
+        return _resposta;
+    }
 
     public void emEspera(String mensagem) throws IOException{
 
@@ -44,33 +55,28 @@ class TCPClient{
             _pedido += _mensagem[1];
             _pedido += "\n";
         }
-        System.out.println("Li: ");
-        
-        
 
-        
-
-	    
-        
-        
         outToServer = new DataOutputStream(clientSocket.getOutputStream());
-      // inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        
         outToServer.writeBytes(_pedido);
         
+        inFromServer = new DataInputStream( clientSocket.getInputStream()); 
         
-        
-         DataInputStream inFromServer = new DataInputStream( clientSocket.getInputStream()); 
-      /*  int lixo = inFromServer.read();
-         System.out.println("Li: " + lixo);*/
-         byte[] digit = new byte[20];
+        /*REP ok 175971 DATA*/
+
+        String st = new String(leXBytes(4));
+        if(st.equals("REP ")){
+            st = new String(leXBytes(1));
+            if(st.equals("o")){
+                System.out.println("vem ok");
+                /*st = new String(leXBytes(2));
+                int tamanho = inFromServer.readInt();*/
+                System.out.println("tamanho: " + inFromServer.readInt());
+            }else{
+                System.out.println("O ficheiro não foi encontrado no SS");
+            }
+        }
          
-       for(int i = 0; i < 20; i++)
-				digit[i] = inFromServer.readByte();
-		  
-			  String st = new String(digit);
-			  
-			  System.out.println("Received: "+ st); 
+	     
          
 
         
