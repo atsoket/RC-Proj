@@ -71,6 +71,7 @@ public class User{
                 int[] SS;
                 
                 while( !acabou ){
+                        /*JAVA 7
                         if(comandos.testa()){ //COMANDOS VÁLIDOS
                                 
                                 switch (comandos.getTipo()) {
@@ -78,16 +79,16 @@ public class User{
                                     Thread udp = new Thread(new threadUDP(servidor, porto, "LST\n" ));
                                     udp.start();
                                     System.out.println("comando LST");
-                                   //lançar UDP
+                                   
                                     break;
-                                case "retrieve": /* retrieve file_name */
+                                case "retrieve": 
                                     argumentos = comandos.getArgs();
                                     Thread tcpR = new Thread( new threadTCP(arrayIP[0], Integer.parseInt(arrayIP[1]), ("retrieve " + argumentos[1])));
                                     tcpR.start();
                                     System.out.println("comando REQ");
                                     //lançar TCP + args[1]
                                     break;
-                                case "upload": /*  */
+                                case "upload": 
                                     argumentos = comandos.getArgs();
                                     Thread tcpU = new Thread( new threadTCP(servidor, porto, argumentos[1]  ));
                                     tcpU.start();
@@ -100,8 +101,37 @@ public class User{
                                 default: 
                                     System.out.println("O comando não é reconhecido.");
                                     break;
-                                }
+                                }*/
+                              if(comandos.testa()){ //COMANDOS VÁLIDOS
                                 
+                                switch (comandos.getTipoJava6()) {
+                                case 1:
+                                    Thread udp = new Thread(new threadUDP(servidor, porto, "LST\n" ));
+                                    udp.start();
+                                    System.out.println("comando LST");
+                                   
+                                    break;
+                                case 2: 
+                                    argumentos = comandos.getArgs();
+                                    Thread tcpR = new Thread( new threadTCP(arrayIP[0], Integer.parseInt(arrayIP[1]), ("retrieve " + argumentos[1])));
+                                    tcpR.start();
+                                    System.out.println("comando REQ");
+                                    //lançar TCP + args[1]
+                                    break;
+                                case 3: 
+                                    argumentos = comandos.getArgs();
+                                    Thread tcpU = new Thread( new threadTCP(servidor, porto, argumentos[1]  ));
+                                    tcpU.start();
+                                    System.out.println("comando UPL");
+                                    //lançar TCP + args[1]
+                                    break;
+                                case 4:
+                                    acabou = true;
+                                    break;
+                                default: 
+                                    System.out.println("O comando não é reconhecido.");
+                                    break;
+                                }  
                         }else{//COMANDOS INVÁLIDOS
                                 System.out.println("O comando introduzido contém espaços a mais!");
                         }      

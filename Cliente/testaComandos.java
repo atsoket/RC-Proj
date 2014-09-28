@@ -18,6 +18,19 @@ public class testaComandos{
                 return _comandoArgs[0];
         }
         
+        public int getTipoJava6(){
+                if(_comandoArgs[0].charAt(0) == 'l')
+                        return 1;
+                else if(_comandoArgs[0].charAt(0) == 'r')
+                        return 2;
+                else if(_comandoArgs[0].charAt(0) == 'u')
+                        return 3;
+                else if(_comandoArgs[0].charAt(0) == 'e')
+                        return 4;         
+                        
+                return -1;               
+        }
+        
         public String[] getArgs(){
                 return _comandoArgs;
         }
