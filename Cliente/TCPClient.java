@@ -24,6 +24,25 @@ class TCPClient{
             }
     }
     
+    public String getPalavra(){
+        String _resposta = "";
+        char lixo;
+        
+        try{
+            for(int i = 0; i < 1024; i++){
+                lixo = (char)inFromServer.readByte();
+	            if( lixo != ' ')
+	                _resposta += lixo;
+	            else
+	                break;
+	        }
+        }catch(IOException ex){
+                    System.out.println("Problema no getPalavra()");
+            }
+            
+            return _resposta;
+    }
+    
     public byte[] leXBytes(int numBytes){
         byte[] _resposta = new byte[numBytes];
         
@@ -62,15 +81,23 @@ class TCPClient{
         inFromServer = new DataInputStream( clientSocket.getInputStream()); 
         
         /*REP ok 175971 DATA*/
+        String st = new String( getPalavra() );
 
-        String st = new String(leXBytes(4));
-        if(st.equals("REP ")){
-            st = new String(leXBytes(1));
-            if(st.equals("o")){
-                System.out.println("vem ok");
-                /*st = new String(leXBytes(2));
-                int tamanho = inFromServer.readInt();*/
-                System.out.println("tamanho: " + inFromServer.readInt());
+        if(st.equals("REP")){
+            st = new String( getPalavra() );
+            if(st.equals("ok")){
+
+                st = new String( getPalavra() );
+                int tamanhoFicheiro = Integer.parseInt(st);
+                FileOutputStream fos = new FileOutputStream(_mensagem[1]);
+                BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+                
+                for(int k=0; k<tamanhoFicheiro; k++)
+                    bos.write( inFromServer.readByte() );
+
+                bos.close();
+                
             }else{
                 System.out.println("O ficheiro não foi encontrado no SS");
             }
