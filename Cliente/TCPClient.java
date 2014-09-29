@@ -20,7 +20,7 @@ class TCPClient{
                     clientSocket = new Socket(_ipServidor , _porto);
             }catch(IOException ex){
                     System.out.println (ex.toString());
-                    System.out.println("Problema no _udpserv.emEspera(_listaConteudos);");
+                    System.out.println("Problema no TCP");
             }
     }
     
@@ -55,62 +55,98 @@ class TCPClient{
 	        
         return _resposta;
     }
-
-    public void emEspera(String mensagem) throws IOException{
-
+    
+    public void recebeFicheiro(String mensagem){
+        
         String[] _mensagem = mensagem.split(" ");
         String _pedido = "";
-
         
-        if( _mensagem[0].equals("retrieve") ){
-            _pedido += "REQ ";
-            _pedido += _mensagem[1];
-            _pedido += "\n";
+        _pedido += "REQ ";
+        _pedido += _mensagem[1];
+        _pedido += "\n";
             
+            
+        try{
+        
+            outToServer = new DataOutputStream(clientSocket.getOutputStream());
+            outToServer.writeBytes(_pedido);
+            inFromServer = new DataInputStream( clientSocket.getInputStream()); 
+            
+        }catch(IOException ex){
+                    System.out.println("Problema TCPClient.java:71");
         }
         
-        if( _mensagem[0].equals("upload") ){
-            _pedido += "UPR ";
-            _pedido += _mensagem[1];
-            _pedido += "\n";
-        }
-
-        outToServer = new DataOutputStream(clientSocket.getOutputStream());
-        outToServer.writeBytes(_pedido);
         
-        inFromServer = new DataInputStream( clientSocket.getInputStream()); 
         
         /*REP ok 175971 DATA*/
         String st = new String( getPalavra() );
 
         if(st.equals("REP")){
+
             st = new String( getPalavra() );
             if(st.equals("ok")){
 
                 st = new String( getPalavra() );
                 int tamanhoFicheiro = Integer.parseInt(st);
-                FileOutputStream fos = new FileOutputStream(_mensagem[1]);
-                BufferedOutputStream bos = new BufferedOutputStream(fos);
-
                 
-                for(int k=0; k<tamanhoFicheiro; k++)
-                    bos.write( inFromServer.readByte() );
-
-                bos.close();
+                
+                try{
+                
+                    FileOutputStream fos = new FileOutputStream(_mensagem[1]);
+                    BufferedOutputStream bos = new BufferedOutputStream(fos);
+                    
+                    for(int k=0; k<tamanhoFicheiro; k++)
+                        bos.write( inFromServer.readByte() );
+                        
+                    bos.close();
+                    
+                    char lie = (char)inFromServer.readByte();
+                
+                    if( lie != '\n')
+                        System.out.println("Mensagem sem \\n no final");
+                    
+                }catch(FileNotFoundException fnf){
+                    System.out.println("Problema a criar Ficheiro\n" + "Problema TCPClient.java:97");
+                }catch(IOException ex){
+                            System.out.println("Problema TCPClient.java:71");
+                }
+                
+                
+                
                 
             }else{
                 System.out.println("O ficheiro não foi encontrado no SS");
             }
         }
-         
-	     
-         
-
+    }
+    
+    public void enviaFicheiro(String mensagem){
+    
+        String[] _mensagem = mensagem.split(" ");
+        String _pedido = "";
+        _pedido = "UPR " + _mensagem[1] + "\n";
         
-        /*String modifiedSentence = inFromServer.readLine();
-        System.out.println("FROM SERVER: " + modifiedSentence);*/
+        
+        
+        
+    }   
+
+    public void emEspera(String mensagem) throws IOException{
+
+        String[] _mensagem = mensagem.split(" ");  
+              
+        if( _mensagem[0].equals("retrieve") )            
+            recebeFicheiro(mensagem);  
+                      
+        else if( _mensagem[0].equals("upload") )        
+            enviaFicheiro(mensagem);     
+                   
+        else        
+            System.out.println("Comando não reconhecido");
+            
+        
+
         clientSocket.close();
-      
    
     }
 }

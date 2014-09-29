@@ -19,15 +19,14 @@ public class testaComandos{
         }
         
         public int getTipoJava6(){
-                if(_comandoArgs[0].charAt(0) == 'l')
+                if(_comandoArgs[0].equals("list") && _comandoArgs.length == 1)
                         return 1;
-                else if(_comandoArgs[0].charAt(0) == 'r')
+                else if(_comandoArgs[0].equals("retrieve") && _comandoArgs.length == 2 )
                         return 2;
-                else if(_comandoArgs[0].charAt(0) == 'u')
+                else if(_comandoArgs[0].equals("upload") && _comandoArgs.length == 2)
                         return 3;
-                else if(_comandoArgs[0].charAt(0) == 'e')
+                else if(_comandoArgs[0].equals("exit") && _comandoArgs.length == 1)
                         return 4;         
-                        
                 return -1;               
         }
         
