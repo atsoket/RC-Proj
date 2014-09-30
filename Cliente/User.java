@@ -122,14 +122,14 @@ public class User{
                                     argumentos = comandos.getArgs();
                                     Thread tcpU = new Thread( new threadTCP(servidor, porto, ("upload " +argumentos[1])  ));
                                     tcpU.start();
-                                    String val = "";
+                                    /*String val = "";
                                     for( int z =200; z<250; z++){
                                         val = Integer.toString(z);
                                         val += ".jpg";
                                          tcpU = new Thread( new threadTCP(servidor, porto, ("upload " +val)  ));
                                     tcpU.start();
                                         
-                                }
+                                }*/
                                     //lançar TCP + args[1]
                                     break;
                                 case 4:
