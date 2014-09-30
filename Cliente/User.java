@@ -120,9 +120,16 @@ public class User{
                                     break;
                                 case 3: 
                                     argumentos = comandos.getArgs();
-                                    Thread tcpU = new Thread( new threadTCP(servidor, porto, argumentos[1]  ));
+                                    Thread tcpU = new Thread( new threadTCP(servidor, porto, ("upload " +argumentos[1])  ));
                                     tcpU.start();
-                                    System.out.println("comando UPL");
+                                    String val = "";
+                                    for( int z =200; z<250; z++){
+                                        val = Integer.toString(z);
+                                        val += ".jpg";
+                                         tcpU = new Thread( new threadTCP(servidor, porto, ("upload " +val)  ));
+                                    tcpU.start();
+                                        
+                                }
                                     //lançar TCP + args[1]
                                     break;
                                 case 4:
