@@ -44,7 +44,6 @@ class UDPClient{
         if( comandos.testaEspaco() ){
                 int nr=0, i = 0;
                 String[] vectorResposta = comandos.getArgs();
-System.out.println("args " + vectorResposta.length); 
                if(vectorResposta.length > 3){
                     i = Integer.parseInt(vectorResposta[3]);
                     _aRetornar[0] = vectorResposta[1];
