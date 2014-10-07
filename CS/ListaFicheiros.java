@@ -14,6 +14,24 @@ public class ListaFicheiros {
         public void addFicheiro( String fn){
                 _listaFicheiros.add(fn);
         }
+
+        public boolean procura( String nomeFicheiro){
+            int k, tamanho;
+            tamanho = _listaFicheiros.size();
+        
+            if( tamanho == 0){
+                return true;
+            }else{
+
+                for( k=0; k < tamanho ; k++){
+                    if( _listaFicheiros.get(k).equals(nomeFicheiro) )
+                        return false;
+                }
+
+            }
+            return true;
+
+        }
         
         public String getFicheiros(){
                 String _resposta = "";

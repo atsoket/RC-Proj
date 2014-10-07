@@ -42,7 +42,7 @@ public class CS{
                 public void run() {
                         try{
                                 TCPServer _welcomeSocket = new TCPServer(_porto);
-                                _welcomeSocket.emEspera();
+                                _welcomeSocket.emEspera( _listaConteudos);
                         
                         }catch (SocketException e) {
                                 System.out.println("Problema no TCPServer _udpserv = new UDPServer(porto);"); /*TCP.java em falta*/
