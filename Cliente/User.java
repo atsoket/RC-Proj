@@ -108,14 +108,14 @@ public class User{
                                 case 1:
                                     Thread udp = new Thread(new threadUDP(servidor, porto, "LST\n" ));
                                     udp.start();
-                                    System.out.println("comando LST");
+                                   // System.out.println("comando LST");
                                    
                                     break;
                                 case 2: 
                                     argumentos = comandos.getArgs();
                                     Thread tcpR = new Thread( new threadTCP(arrayIP[0], Integer.parseInt(arrayIP[1]), ("retrieve " + argumentos[1])));
                                     tcpR.start();
-                                    System.out.println("comando REQ");
+                                    //System.out.println("comando REQ");
                                     //lançar TCP + args[1]
                                     break;
                                 case 3: 
@@ -136,11 +136,11 @@ public class User{
                                     acabou = true;
                                     break;
                                 default: 
-                                    System.out.println("O comando não é reconhecido.");
+                                    System.out.println("ERR: O comando não é reconhecido.");
                                     break;
                                 }  
                         }else{//COMANDOS INVÁLIDOS
-                                System.out.println("O comando introduzido contém espaços a mais!");
+                                System.out.println("ERR: O comando introduzido contém espaços a mais!");
                         }      
                 }
                

@@ -4,16 +4,18 @@ import java.lang.*;
 
 public class UDPServer { 
     DatagramSocket serverSocket;
-    ListaFicheiros _listaConteudos;
+   // ListaFicheiros _listaConteudos;
+    int _porto;
     
         public UDPServer(int porto)throws SocketException{
+                _porto = porto;
                 serverSocket = new DatagramSocket(porto);
         }
 
         public void emEspera(ListaFicheiros listaConteudos) throws IOException{
              byte[] receiveData = new byte[1024];
              byte[] sendData = new byte[1024];
-             _listaConteudos = listaConteudos;
+            // _listaConteudos = listaConteudos;
              
              System.out.println(InetAddress.getLocalHost());
              
@@ -38,14 +40,25 @@ public class UDPServer {
                        String resposta = "AWL ";
 
                        resposta += InetAddress.getLocalHost().getHostAddress();
-                       resposta += " 58006 2 f1 f2\n";
-                      /* resposta += sserver.getPorto();   //BORA BRUNO
-                       resposta += getFicheirosNum();
-                       resposta += getFicheirosLista();*/
+                       resposta += " ";
+                       resposta += _porto;
+                       resposta += " ";
+                       resposta += listaConteudos.getNumFicheiros();
+                       if( listaConteudos.getNumFicheiros() == 0)
+                            resposta = "EOF\n";
+                       else{
+                           resposta += listaConteudos.getFicheirosLista(); /*já mete o espaço*/
+                           resposta += "\n";
+                       }
                        sendData = resposta.getBytes();
                        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
                        serverSocket.send(sendPacket);
-                   }
+                   }else{
+                        String resposta = "ERR\n";
+                        sendData = resposta.getBytes();
+                       DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+                       serverSocket.send(sendPacket);
+                   }    
                         
                    
                    

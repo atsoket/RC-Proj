@@ -59,12 +59,55 @@ class TCPServer {
                 System.out.println(" ahahahah ");
             }else if( _comando.equals("UPR") ){
                 String _nomeFicheiro = new String( getPalavra() );
+
                 
                 if( listaConteudos.procura(_nomeFicheiro) ){
-                    
                     outToClient = new DataOutputStream( connectionSocket.getOutputStream() );
-                    outToClient.writeBytes("AWC ok");
+                    _comando = "AWR new\n";
+                    outToClient.writeBytes(_comando);
+                    /*UPC size data*/
+                    _comando = new String( getPalavra() );
+                    System.out.println("resposta: " + _comando);
+                    if( _comando.equals("UPC") ){
+                        _comando = new String( getPalavra() );
+                        int tamanhoFicheiro = Integer.parseInt(_comando);
+                        
+                        try{
 
+                            FileOutputStream fos = new FileOutputStream(_nomeFicheiro);
+                            BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+                            for(int k=0; k<tamanhoFicheiro; k++)
+                            bos.write( inFromClient.readByte() );
+
+                            
+
+                            char lie = (char)inFromClient.readByte();
+
+                            if( lie != '\n'){
+                                System.out.println("Mensagem sem \\n no final");
+                                outToClient.writeBytes("ERR\n");
+                            }else{
+                                 bos.close();
+                                 listaConteudos.addFicheiro(_nomeFicheiro);
+                                 outToClient.writeBytes("AWC ok\n");
+                                 System.out.println("Ficheiro recebido com sucesso");
+                            }
+
+                        }catch(FileNotFoundException fnf){
+                        System.out.println("Problema a criar Ficheiro\n" + "Problema TCPServer.java:89");
+                        }catch(IOException ex){
+                        System.out.println("Problema TCPServer.java:91");
+                        }
+                    
+                    }else{
+                        System.out.println("O user não respondeu o UPC correcto");
+                    }
+
+                }else{
+                     outToClient = new DataOutputStream( connectionSocket.getOutputStream() );
+                    outToClient.writeBytes("AWR dup\n");
+                    System.out.println("Ficheiro " + _nomeFicheiro + " em duplicado ");
                 }
                 /*
                 try{

@@ -24,8 +24,8 @@ public class ListaFicheiros {
             }else{
 
                 for( k=0; k < tamanho ; k++){
-                    if( _listaFicheiros.get(k).equals(nomeFicheiro) )
-                        return false;
+                    if( _listaFicheiros.get(k).equals(nomeFicheiro) ){System.out.println("achou");
+                        return false;}
                 }
 
             }
@@ -33,15 +33,17 @@ public class ListaFicheiros {
 
         }
         
-        public String getFicheiros(){
+        public int getNumFicheiros(){
+            return _listaFicheiros.size();
+        }
+        
+        public String getFicheirosLista(){
                 String _resposta = "";
                 int dim = _listaFicheiros.size(); /*Poupa tempo*/
                 for (int i = 0; i < dim; i++) {
-                        _resposta += Integer.toString(i + 1);
-                        _resposta += " ";
-			_resposta += _listaFicheiros.get(i);
-			_resposta += "\n";
-		}
+                    _resposta += " ";
+                    _resposta += _listaFicheiros.get(i);
+                }
 		return _resposta;
         }
 

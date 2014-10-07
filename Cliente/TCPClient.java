@@ -141,7 +141,6 @@ class TCPClient{
         }
 
         String st = new String( getPalavra() );
-         
         if(st.equals("AWR")){
             st = new String( getPalavra() );
             if(st.equals("new")){                
@@ -202,6 +201,7 @@ class TCPClient{
    
     }
 }
+
 
 /* CÓDIGO EXEMPLO
  while (true) {
