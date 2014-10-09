@@ -12,7 +12,7 @@ public class User{
        public final static int NG = 58006;
        private static String[] arrayIP;
        
-       private static class threadUDP implements Runnable {
+       private static class threadUDP extends Thread {
                 int _porto;
 		        String _servidor, _mensagem;
                         
@@ -32,11 +32,11 @@ public class User{
                         }catch(IOException ex){
                                 System.out.println (ex.toString());
                                 System.out.println("Problema no _udpclientemEspera(_listaConteudos);");
-                        }
+                        }this.stop();
                 }
         }
         
-        private static class threadTCP implements Runnable {
+        private static class threadTCP extends Thread {
                 int _porto;
 		        String _servidor, _mensagem;
                 
@@ -57,7 +57,7 @@ public class User{
                         }catch(IOException ex){
                                 System.out.println (ex.toString());
                                 System.out.println("Problema no _TCPclientemEspera(_listaConteudos);");
-                        }
+                        } this.stop();
                 }
 }
         
@@ -113,8 +113,17 @@ public class User{
                                     break;
                                 case 2: 
                                     argumentos = comandos.getArgs();
-                                    Thread tcpR = new Thread( new threadTCP(arrayIP[0], Integer.parseInt(arrayIP[1]), ("retrieve " + argumentos[1])));
-                                    tcpR.start();
+                                    
+                                    if( arrayIP == null)
+                                        System.err.println("Terá de primeiro fazer list");
+                                    else{
+                                        if( !arrayIP[0].equals("")){
+                                            Thread tcpR = new Thread( new threadTCP(arrayIP[0], Integer.parseInt(arrayIP[1]), ("retrieve " + argumentos[1])));
+                                            tcpR.start();
+                                        }else{
+                                            System.err.println("O list anterior não retornou ficheiros, tente mais tarde");
+                                        }
+                                    }
                                     //System.out.println("comando REQ");
                                     //lançar TCP + args[1]
                                     break;
@@ -141,9 +150,9 @@ public class User{
                                 }  
                         }else{//COMANDOS INVÁLIDOS
                                 System.out.println("ERR: O comando introduzido contém espaços a mais!");
-                        }      
+                        }  
                 }
-               
+ 
                      
        }
         
@@ -184,6 +193,6 @@ public class User{
                                 System.out.println("ERR");
                         }
                 }
-                
+           System.exit(1); 
        }
 } 

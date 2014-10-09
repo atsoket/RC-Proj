@@ -22,7 +22,6 @@ public class SS{
                 public void run() {
                         try{
                                 TCPServer _welcome = new TCPServer(_socket);
-                                 System.out.println("hey");
                                 _welcome.emEspera();
                         
                         }catch (SocketException e) {
@@ -72,14 +71,15 @@ public class SS{
 		    try {
 			    SSSocket = new ServerSocket(_porto);
 		    } catch (IOException e) {
-			    System.err.println("O porto escollhido já está em uso");
+			    System.err.println("O porto escollhido já está em uso\nPrograma abortado");
+			    System.exit(1);
 		    }
 		        while (listening) {
 			        Socket socket;
 			        try {
 				        socket = SSSocket.accept();
 				        if (socket.isConnected()) {
-				        
+				            
 				            threadTCP thread = new threadTCP(socket);
 					        thread.start();
 					    }

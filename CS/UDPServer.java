@@ -32,7 +32,8 @@ public class UDPServer {
                    InetAddress IPAddress = receivePacket.getAddress();
                    int port = receivePacket.getPort();
                    
-                   System.out.println("RECEIVED: " + sentence + " FROM: " + receivePacket.getAddress().getHostAddress()+ " PORT: " + port);
+                   System.out.println("+==================+\n| Pedido: LST      |\n| Origem:" + receivePacket.getAddress().getHostAddress() + " |\n| Porto: " + port+"     |\n+==================+"); 
+                   //System.out.println("RECEIVED: " + sentence + " FROM: " + receivePacket.getAddress().getHostAddress()+ " PORT: " + port);
                    
                    if( sentence.contains("LST\n")){
                        /*AWL ip porta num  f1 f2*/

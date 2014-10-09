@@ -167,12 +167,12 @@ class TCPClient{
 			            }
                     
                 }catch(FileNotFoundException fnf){
-                    System.out.println("Problema a criar Ficheiro\n" + "Problema TCPClient.java:97");
+                    System.out.println("Ficheiro não encontrado\n");
                 }catch(IOException ex){
                             System.out.println("Problema TCPClient.java:186" + ex);
                 }
+     
                 
-            
             }else if( st.equals("dup") ){
                 System.out.println("Ficheiro Duplicado");
             }else{
@@ -180,6 +180,13 @@ class TCPClient{
             }
         }
         
+        try{
+         outToServer.close();
+         inFromServer.close();
+         clientSocket.close();
+         }catch(IOException ex){
+                            System.out.println("Problema a fechar");
+                }
     }   
 
     public void emEspera(String mensagem) throws IOException{
@@ -202,65 +209,3 @@ class TCPClient{
     }
 }
 
-
-/* CÓDIGO EXEMPLO
- while (true) {
-    
-      Socket sock = servsock.accept();
-      byte[] mybytearray = new byte[(int) myFile.length()];
-      
-      
-      System.out.println("tamanho server: " + (int) myFile.length()); //ESTÁ CERTO FDX
-      
-      BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
-      
-      bis.read(mybytearray, 0, mybytearray.length);
-      
-      OutputStream os = sock.getOutputStream();
-      
-      os.write(mybytearray, 0, mybytearray.length);
-      
-      os.flush();
-      
-      sock.close();
-*/
-/* OUTRO
-
-FileWriter out = new FileWriter("test.txt");
-			  BufferedWriter bufWriter = new BufferedWriter(out);
-		   
-			  //Step 1 read length
-			  int nb = input.readInt();
-			  System.out.println("Read Length"+ nb);
-			  byte[] digit = new byte[nb];
-			  //Step 2 read byte
-			   System.out.println("Writing.......");
-			  for(int i = 0; i < nb; i++)
-				digit[i] = input.readByte();
-			  
-			   String st = new String(digit);
-			  bufWriter.append(st);
-			   bufWriter.close();
-				System.out.println ("receive from : " + 
-				clientSocket.getInetAddress() + ":" +
-				clientSocket.getPort() + " message - " + st);
-			  
-			  //Step 1 send length
-			  output.writeInt(st.length());
-			  //Step 2 send length
-			  output.writeBytes(st); // UTF is a string encoding
-		  //  output.writeUTF(data); 
-			} 
-			catch(EOFException e) {
-			System.out.println("EOF:"+e.getMessage()); } 
-			catch(IOException e) {
-			System.out.println("IO:"+e.getMessage());}  
-   
-			finally { 
-			  try { 
-				  clientSocket.close();
-			  }
-			  catch (IOException e){}
-			}
-
-*/

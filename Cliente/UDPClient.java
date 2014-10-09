@@ -37,30 +37,34 @@ class UDPClient{
         String modifiedSentence = new String(receivePacket.getData());
         System.out.print("FROM SERVER:" + modifiedSentence);     
         
-        testaComandos comandos = new testaComandos();
-        comandos.setComandos(modifiedSentence, modifiedSentence);      
         
-        /*AWL ip porta num  f1 f2*/
-        if( comandos.testaEspaco() ){
-                int nr=0, i = 0;
-                String[] vectorResposta = comandos.getArgs();
-                if( vectorResposta.length == 1)
-                    System.out.println("Não existem ficheiros disponíveis nos SS's");
-               if(vectorResposta.length > 3){
-                    i = Integer.parseInt(vectorResposta[3]);
-                    _aRetornar[0] = vectorResposta[1];
-                    _aRetornar[1] = vectorResposta[2];
-                    if( i == ( vectorResposta.length - 4 ) )			
-                        while(i>0){
-                            System.out.println( ++nr + " - " + vectorResposta[4+nr-1]);
-                            i--;
+        if( !modifiedSentence.equals("EOF") ){
+        
+                testaComandos comandos = new testaComandos();
+                comandos.setComandos(modifiedSentence, modifiedSentence);      
+                
+                /*AWL ip porta num  f1 f2*/
+                if( comandos.testaEspaco() ){
+                        int nr=0, i = 0;
+                        String[] vectorResposta = comandos.getArgs();
+                        if( vectorResposta.length == 1)
+                            System.out.println("Não existem ficheiros disponíveis nos SS's");
+                       if(vectorResposta.length > 3){
+                            i = Integer.parseInt(vectorResposta[3]);
+                            _aRetornar[0] = vectorResposta[1];
+                            _aRetornar[1] = vectorResposta[2];
+                            if( i == ( vectorResposta.length - 4 ) )			
+                                while(i>0){
+                                    System.out.println( ++nr + " - " + vectorResposta[4+nr-1]);
+                                    i--;
+                                }
                         }
+                }else{
+                       System.out.println("ERR: A resposta ao list está mal formatada");
                 }
-        }else{
-               System.out.println("ERR: A resposta ao list está mal formatada");
-        }
-        
-            
+         }else{
+            return _aRetornar;
+         }   
             clientSocket.close();
             return _aRetornar;
         

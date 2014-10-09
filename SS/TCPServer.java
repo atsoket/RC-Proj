@@ -56,8 +56,7 @@ class TCPServer {
 	
 	        String _nomeFicheiro;
 	        
-	         System.out.println("em espera");
-	      	       
+	        	      	       
 	 		inFromClient = new DataInputStream( welcomeSocket.getInputStream()); 
        
             String _comando = new String( getPalavra() );
@@ -66,14 +65,18 @@ class TCPServer {
 
             if( _comando.equals("REQ") ){
                 try {
-
+                    
+                    
+                    
 				    outToClient = new DataOutputStream( welcomeSocket.getOutputStream() );
                     _nomeFicheiro = new String( getPalavra() );  
+                    
+                    System.out.println("+==================+\n| Pedido: REQ      |\n| Origem:" + welcomeSocket.getInetAddress().getHostAddress() + " |\n| Porto: " + welcomeSocket.getPort() +"     |\n" + "| File:    " + _nomeFicheiro + " |\n+==================+");
                 
                     if( BARRAN){
 				
 						String pedido = _nomeFicheiro + " "	+ welcomeSocket.getInetAddress().getHostAddress()+ welcomeSocket.getPort();
-						System.out.println(pedido);
+						//System.out.println(pedido);
 						String toSend = "REP ";
 						byte[] tofile = readFile(_nomeFicheiro);
 						if (!(new String(tofile).equals("nok"))) {
@@ -98,12 +101,12 @@ class TCPServer {
 				
 			 
             }else if( _comando.equals("UPS") ){
-                System.out.println("chegou um UPS");
+                
                 _nomeFicheiro = new String( getPalavra() );          
                 outToClient = new DataOutputStream( welcomeSocket.getOutputStream() );
                 _comando = new String( getPalavra() );
                         
-                       
+                System.out.println("+==================+\n| Pedido: UPS      |\n| Origem:" + welcomeSocket.getInetAddress().getHostAddress() + " |\n| Porto: " + welcomeSocket.getPort()+"     |\n" +"| File: " + _nomeFicheiro +"    |\n+==================+");       
 				        
                         try{
                         

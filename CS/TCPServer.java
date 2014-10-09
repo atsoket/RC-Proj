@@ -41,7 +41,7 @@ class TCPServer {
 
 	public void emEspera( ListaFicheiros listaConteudos, ArrayList<String> listaSS ) throws IOException{
 	       		
-
+            boolean tudoOK=true;
            
             inFromClient = new DataInputStream( welcomeSocket.getInputStream()); 
        
@@ -52,14 +52,15 @@ class TCPServer {
                 outToClient.writeBytes("ERR\n");
                 System.out.println("O pedido retrieve deve ser efectuado para o SS");
             }else if( _comando.equals("UPR") ){
+                 
                 String _nomeFicheiro = new String( getPalavra() );
 
-                
+                System.out.println("+==================+\n| Pedido: UPR      |\n| Origem:" + welcomeSocket.getInetAddress().getHostAddress() + " |\n| Porto: " + welcomeSocket.getPort()+"     |\n"+"| File: " + _nomeFicheiro +"   |\n+==================+"); 
                 if( listaConteudos.procura(_nomeFicheiro) ){
                     outToClient = new DataOutputStream( welcomeSocket.getOutputStream() );
                     _comando = "AWR new\n";
                     outToClient.writeBytes(_comando);
-                    /*UPC size data*/
+                    
                     _comando = new String( getPalavra() );
                
                     if( _comando.equals("UPC") ){
@@ -69,8 +70,8 @@ class TCPServer {
                  
                         try{
 
-                            FileOutputStream fos = new FileOutputStream(_nomeFicheiro);
-                            BufferedOutputStream bos = new BufferedOutputStream(fos);
+                           // FileOutputStream fos = new FileOutputStream(_nomeFicheiro);
+                          //  BufferedOutputStream bos = new BufferedOutputStream(fos);
                             
         
                             for(int j=0; j<listaSS.size(); j++){
@@ -80,39 +81,45 @@ class TCPServer {
                                 _listaOut.get(j).writeBytes("UPS " + _nomeFicheiro + " " + tamanhoFicheiro + " ");
                                 
                             }
-                            System.out.println(" Pos envio");
+                            
 
                             for(int k=0; k<tamanhoFicheiro; k++){
                                 byte _lixo = inFromClient.readByte();
                                 for(int j=0; j<listaSS.size(); j++){
                                     _listaOut.get(j).write( _lixo );
                                 }
-                                bos.write(  _lixo );
+                                //bos.write(  _lixo );
                             }
-                            System.out.println(" Pre get respostas");
+                            
 
                             for(int j=0; j<listaSS.size(); j++){
                                     _listaOut.get(j).write("\n".getBytes());
                                     _listaIn.add( new DataInputStream( _listaSockets.get(j).getInputStream() ) );
-                                    System.out.println( (String)_listaIn.get(j).readLine() );
+                                    //System.out.println( (String)_listaIn.get(j).readLine() );
+                                   String cenas = _listaIn.get(j).readLine();
+                                   if( !cenas.contains("AWS ok"))
+                                       tudoOK = false;
+                                       
+                                        
                             }
                            
-                            System.out.println(" Pos get respostas");
-
+                           
                             char lie = (char)inFromClient.readByte();
 
                             if( lie != '\n'){
                                 System.out.println("Mensagem sem \\n no final");
                                 outToClient.writeBytes("ERR\n");
                             }else{
-                                 bos.close();
-                                 listaConteudos.addFicheiro(_nomeFicheiro);
+                                
+                                 
                                  /*ENVIAR OS FICHEIROS PÓ SS*/
-                                 System.out.println("Tamanho que o ficheiro deverá ter: " + tamanhoFicheiro
-						+ " bytes.");
+                                 
 			
-				
-                                 outToClient.writeBytes("AWC ok\n");
+				                 if(tudoOK){
+                                    outToClient.writeBytes("AWC ok\n");
+                                    listaConteudos.addFicheiro(_nomeFicheiro);
+                                    System.out.println("Ficheiro recebido com sucesso");
+                                 }
                                  System.out.println("Ficheiro recebido com sucesso");
                             }
 
