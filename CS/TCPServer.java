@@ -1,6 +1,9 @@
 import java.io.*;
 import java.net.*;
+
+
 class TCPServer {    
+
         ServerSocket welcomeSocket;
         DataInputStream inFromClient;
         DataOutputStream outToClient;
@@ -56,7 +59,9 @@ class TCPServer {
             String _comando = new String( getPalavra() );
 
             if( _comando.equals("REQ") ){
-                System.out.println(" ahahahah ");
+                outToClient = new DataOutputStream( connectionSocket.getOutputStream() );
+                outToClient.writeBytes("ERR\n");
+                System.out.println("O pedido retrieve deve ser efectuado para o SS");
             }else if( _comando.equals("UPR") ){
                 String _nomeFicheiro = new String( getPalavra() );
 
@@ -90,6 +95,7 @@ class TCPServer {
                             }else{
                                  bos.close();
                                  listaConteudos.addFicheiro(_nomeFicheiro);
+                                 /*ENVIAR OS FICHEIROS PÓ SS*/
                                  outToClient.writeBytes("AWC ok\n");
                                  System.out.println("Ficheiro recebido com sucesso");
                             }
@@ -109,27 +115,7 @@ class TCPServer {
                     outToClient.writeBytes("AWR dup\n");
                     System.out.println("Ficheiro " + _nomeFicheiro + " em duplicado ");
                 }
-                /*
-                try{
                 
-                    FileOutputStream fos = new FileOutputStream(_mensagem[1]);
-                    BufferedOutputStream bos = new BufferedOutputStream(fos);
-                    
-                    for(int k=0; k<tamanhoFicheiro; k++)
-                        bos.write( inFromServer.readByte() );
-                        
-                    bos.close();
-                    
-                    char lie = (char)inFromServer.readByte();
-                
-                    if( lie != '\n')
-                        System.out.println("Mensagem sem \\n no final");
-                    
-                }catch(FileNotFoundException fnf){
-                    System.out.println("Problema a criar Ficheiro\n" + "Problema TCPClient.java:97");
-                }catch(IOException ex){
-                            System.out.println("Problema TCPClient.java:71");
-                }*/
             }
            
 
@@ -137,54 +123,7 @@ class TCPServer {
 		}       
 	}
 
-    /* public void emEspera(ListaFicheiros listaConteudos) throws IOException{
-
-        String[] _mensagem = mensagem.split(" ");  
-              
-        if( _mensagem[0].equals("retrieve") )            
-            recebeFicheiro(mensagem);  
-                      
-        else if( _mensagem[0].equals("upload") )        
-            enviaFicheiro(mensagem);     
-                   
-        else        
-            System.out.println("Comando não reconhecido");
-            
-        
-
-        clientSocket.close();
-   
-    }*/
 } 
-
-
-
-/*
-import java.io.*;
-import java.net.*;
-class TCPServer {    
-	public static void main(String argv[]) throws Exception{ 
-	        String clientSentence;
-	        String capitalizedSentence;
-		    ServerSocket welcomeSocket = new ServerSocket(58006);
-		    
-		    
-		while(true){             
-			Socket connectionSocket = welcomeSocket.accept();
-		    BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));  
-		    
-      	   //* clientSentence = inFromClient.readLine();
-      			System.out.println(inFromClient.readLine());
-      			clientSentence = "WERFWEF";
-      			
-      		DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());	
-			System.out.println("Received: " + clientSentence);
-		        capitalizedSentence = clientSentence.toUpperCase() + '\n';
-	                outToClient.writeBytes(capitalizedSentence);          
-		}       
-	} 
-} 
-*/
 
 
 
