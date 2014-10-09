@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 public class User{
 
        
-
+       static final String _erro = "Cliente invocado indevidamente\nPara o invocar deverá escrever: java User [-n CSname] [-p CSport]\nPrograma Terminado...\n\n";
        public final static int NG = 58006;
        private static String[] arrayIP;
        
@@ -160,8 +160,10 @@ public class User{
         
     // user -n tejo.ist.utl.pt -p 53543
         public static void main(String args[]) throws Exception{
-                if(args.length == 1 || args.length == 3){
-                        System.out.println("Argumento em falta");
+        
+                if(args.length == 1 || args.length == 3 || args.length >= 5){
+                        System.err.println(_erro);
+                        System.exit(1);
                 }else{                       
                         if(args.length == 0)
                                 correServidor("localhost", NG);  

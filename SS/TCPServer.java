@@ -54,7 +54,9 @@ class TCPServer {
 
 	public void emEspera() throws IOException{
 	
-	        String _nomeFicheiro
+	        String _nomeFicheiro;
+	        
+	         System.out.println("em espera");
 	      	       
 	 		inFromClient = new DataInputStream( welcomeSocket.getInputStream()); 
        
@@ -68,11 +70,9 @@ class TCPServer {
 				    outToClient = new DataOutputStream( welcomeSocket.getOutputStream() );
                     _nomeFicheiro = new String( getPalavra() );  
                 
-                    if( BARRAN)
+                    if( BARRAN){
 				
-						String pedido = _nomeFicheiro + " "
-								+ welcomeSocket.getInetAddress().getHostAddress()
-								+ welcomeSocket.getPort();
+						String pedido = _nomeFicheiro + " "	+ welcomeSocket.getInetAddress().getHostAddress()+ welcomeSocket.getPort();
 						System.out.println(pedido);
 						String toSend = "REP ";
 						byte[] tofile = readFile(_nomeFicheiro);
@@ -86,7 +86,8 @@ class TCPServer {
 						}
 
 						outToClient.flush();
-						socket.close();
+						}
+						welcomeSocket.close();
 				        outToClient.close();
 				        inFromClient.close();
 					}catch (IOException e) {
@@ -97,20 +98,17 @@ class TCPServer {
 				
 			 
             }else if( _comando.equals("UPS") ){
+                System.out.println("chegou um UPS");
                 _nomeFicheiro = new String( getPalavra() );          
                 outToClient = new DataOutputStream( welcomeSocket.getOutputStream() );
                 _comando = new String( getPalavra() );
                         
+                       
+				        
                         try{
                         
                             int tamanhoFicheiro = Integer.parseInt(_comando);
-                            
-                        } catch (NumberFormatException e) {
-					        System.err.println("Tamanho do ficheiro não é um inteiro");
-					        System.exit(1);
-				        }
-				        
-                        try{
+                        
                             FileOutputStream fos = new FileOutputStream(_nomeFicheiro);
                             BufferedOutputStream bos = new BufferedOutputStream(fos);
 
@@ -134,7 +132,10 @@ class TCPServer {
                                  System.out.println("Ficheiro recebido com sucesso");
                             }
 
-                        }catch(FileNotFoundException fnf){
+                        }catch (NumberFormatException e) {
+					        System.err.println("Tamanho do ficheiro não é um inteiro");
+					        System.exit(1);
+				        }catch(FileNotFoundException fnf){
                             outToClient.writeBytes("AWS nok\n");
                             System.out.println("Problema a criar Ficheiro\n" + "Problema TCPServer.java:89");
                             outToClient.close();

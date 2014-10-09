@@ -1,7 +1,7 @@
 import java.io.*; 
 import java.net.*; 
 import java.lang.*;
-
+import java.util.ArrayList;
 public class UDPServer { 
     DatagramSocket serverSocket;
    // ListaFicheiros _listaConteudos;
@@ -12,7 +12,7 @@ public class UDPServer {
                 serverSocket = new DatagramSocket(porto);
         }
 
-        public void emEspera(ListaFicheiros listaConteudos) throws IOException{
+        public void emEspera(ListaFicheiros listaConteudos, ArrayList<String> listaSS) throws IOException{
              byte[] receiveData = new byte[1024];
              byte[] sendData = new byte[1024];
             // _listaConteudos = listaConteudos;
@@ -38,10 +38,10 @@ public class UDPServer {
                        /*AWL ip porta num  f1 f2*/
                        
                        String resposta = "AWL ";
-
-                       resposta += InetAddress.getLocalHost().getHostAddress();
+                        String[] aux = listaSS.get(0).split(" ");
+                       resposta += aux[0];/*Aqui*/
                        resposta += " ";
-                       resposta += _porto;
+                       resposta += Integer.parseInt(aux[1]);/*aqui*/
                        resposta += " ";
                        resposta += listaConteudos.getNumFicheiros();
                        if( listaConteudos.getNumFicheiros() == 0)
