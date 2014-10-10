@@ -12,15 +12,25 @@ class TCPClient{
     DataInputStream inFromServer;
     Socket clientSocket;
     
-    public TCPClient(int porto, String ipServidor)throws SocketException, java.net.UnknownHostException{
+    public TCPClient(int porto, String ipServidor){
             _ipServidor = ipServidor;
             _porto = porto;
             try{
-                    System.out.println("Vou-me ligar ao "+ _ipServidor + " porto " + _porto);
+                    //System.out.println("Vou-me ligar ao "+ _ipServidor + " porto " + _porto);
                     clientSocket = new Socket(_ipServidor , _porto);
+                    System.out.println("+================================+");
+                     System.out.printf("| Ligação: TCP                   |\n");
+                   System.out.printf("| Destino: %-22s|\n", _ipServidor);
+                   System.out.printf("| Porto: %-24d|\n", _porto);
+                   System.out.println("+================================+");
+                    
+            }catch (ConnectException e) {
+                    System.err.println("A ligação ao CS/SS falhou, verifique os dados e execute o comando mais tarde");
+            }catch (UnknownHostException e) {
+                    System.err.println("Host desconhecido, tente executar o comando mais tarde");
             }catch(IOException ex){
                     System.out.println (ex.toString());
-                    System.out.println("Problema no TCP");
+                    System.out.println("Problema a criar TCP");
             }
     }
     
@@ -160,10 +170,11 @@ class TCPClient{
 			            st = new String( getPalavra() );
 			            if(st.equals("AWC")){
 			                st = new String( getPalavra() );
-                            if(st.equals("ok"))
+                            if(st.equals("ok")){
+                                System.out.println("Ficheiro enviado com sucesso");
                                 return;
-                            else
-                            System.out.println("shit");
+                            }else
+                            System.err.println("Existiu um problema do lado do CS\nPor favor volte a fazer upload.");
 			            }
                     
                 }catch(FileNotFoundException fnf){
@@ -192,6 +203,10 @@ class TCPClient{
     public void emEspera(String mensagem) throws IOException{
 
         String[] _mensagem = mensagem.split(" ");  
+        
+        if( clientSocket == null){
+            return;
+        }
               
         if( _mensagem[0].equals("retrieve") )            
             recebeFicheiro(mensagem);  

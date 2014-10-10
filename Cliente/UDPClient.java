@@ -6,11 +6,19 @@ class UDPClient{
     int _porto;
     DatagramSocket clientSocket;
     InetAddress IPAddress;
+    static int chances = 0;
     
     public UDPClient(int porto, String servidor)throws SocketException, java.net.UnknownHostException{
-            clientSocket = new DatagramSocket();
-	        IPAddress = InetAddress.getByName(servidor);
-            _porto = porto;
+            
+            try{
+                clientSocket = new DatagramSocket();
+	            IPAddress = InetAddress.getByName(servidor);
+                _porto = porto;
+                clientSocket.setSoTimeout(6000);
+            } catch (SocketException e) {
+			    System.err.println("O UDP client falhou");
+			    System.exit(1);
+		    }
     }
 
     public String[] emEspera(String mensagem){
@@ -20,23 +28,48 @@ class UDPClient{
         String[] _aRetornar = {"", ""};
         sendData = mensagem.getBytes();  
         
+        
+        
         DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, _porto);
+        
         try{
             clientSocket.send(sendPacket);        
+        }catch(SocketTimeoutException e){
+			if (chances < 5) {
+				chances++;
+				System.out.println("TimedOut, execute o comando list mais uma vez");
+				//clientSocket.send(sendPacket);
+			} else {
+				System.err.println("As 5 tentativas falharam, tente mais tarde!\nPrograma Abortado!");
+				System.exit(-1);
+			}
         }catch(IOException ex){
                     System.out.println("Problema a enviar ficheiros");
         }
+        
+        
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
         
         try{
             clientSocket.receive(receivePacket);
+       
+        }catch(SocketTimeoutException e){
+			if (chances < 5) {
+				chances++;
+				System.out.println("TimedOut!!!\nSem resposta do Servidor, execute o comando list mais uma vez");
+				return _aRetornar;
+				//clientSocket.send(sendPacket);
+			} else {
+				System.err.println("As 5 tentativas falharam, tente mais tarde!\nPrograma Abortado!");
+				System.exit(-1);
+			}
         }catch(IOException ex){
                     System.out.println("Problema a receber");
         }
         
         String modifiedSentence = new String(receivePacket.getData());
         System.out.print("FROM SERVER:" + modifiedSentence);     
-        
+        chances=0;
         
         if( !modifiedSentence.equals("EOF") ){
         

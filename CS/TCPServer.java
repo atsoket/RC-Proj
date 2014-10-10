@@ -55,7 +55,14 @@ class TCPServer {
                  
                 String _nomeFicheiro = new String( getPalavra() );
 
-                System.out.println("+==================+\n| Pedido: UPR      |\n| Origem:" + welcomeSocket.getInetAddress().getHostAddress() + " |\n| Porto: " + welcomeSocket.getPort()+"     |\n"+"| File: " + _nomeFicheiro +"   |\n+==================+"); 
+                               
+               System.out.println("+================================+");
+               System.out.printf("| Pedido: UPR                    |\n");
+               System.out.printf("| Origem: %-23s|\n", welcomeSocket.getInetAddress().getHostAddress());
+               System.out.printf("| Porto: %-24d|\n", welcomeSocket.getPort());
+               System.out.printf("| Ficheiro: %-21s|\n", _nomeFicheiro);
+               System.out.println("+================================+");
+                
                 if( listaConteudos.procura(_nomeFicheiro) ){
                     outToClient = new DataOutputStream( welcomeSocket.getOutputStream() );
                     _comando = "AWR new\n";
@@ -120,13 +127,18 @@ class TCPServer {
                                     listaConteudos.addFicheiro(_nomeFicheiro);
                                     System.out.println("Ficheiro recebido com sucesso");
                                  }
-                                 System.out.println("Ficheiro recebido com sucesso");
+                                 
                             }
 
                         }catch(FileNotFoundException fnf){
-                        System.out.println("Problema a criar Ficheiro\n" + "Problema TCPServer.java:89");
+                            System.out.println("Problema a criar Ficheiro\n" + "Problema TCPServer.java:89");
+                        }catch (ConnectException e) {
+                            outToClient.writeBytes("AWC nok\n");
+                            System.err.println("Por favor lance o(s) SS(s), visto que a(a) ligação(ões) foi/foram negada(s)");
+                        }catch(EOFException eoef){
+                            System.err.println("O stream do cliente foi interrompido, como tal o ficheiro não foi adicionado");
                         }catch(IOException ex){
-                        System.out.println("Problema TCPServer.java:91");
+                            System.out.println("Problema TCPServer.java:91" + ex);
                         }
                     
                     }else{

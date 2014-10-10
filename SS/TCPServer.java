@@ -56,9 +56,13 @@ class TCPServer {
 	
 	        String _nomeFicheiro;
 	        
-	        	      	       
-	 		inFromClient = new DataInputStream( welcomeSocket.getInputStream()); 
-       
+	        try{   
+	 		    inFromClient = new DataInputStream( welcomeSocket.getInputStream()); 
+            }catch(IOException ex){
+                            System.err.println("Problema a criar o DataInputStream");
+                            return;
+            }
+            
             String _comando = new String( getPalavra() );
             
             
@@ -71,7 +75,14 @@ class TCPServer {
 				    outToClient = new DataOutputStream( welcomeSocket.getOutputStream() );
                     _nomeFicheiro = new String( getPalavra() );  
                     
-                    System.out.println("+==================+\n| Pedido: REQ      |\n| Origem:" + welcomeSocket.getInetAddress().getHostAddress() + " |\n| Porto: " + welcomeSocket.getPort() +"     |\n" + "| File:    " + _nomeFicheiro + " |\n+==================+");
+               
+                
+                    System.out.println("+================================+");
+                    System.out.printf("| Pedido: REQ                    |\n");
+                    System.out.printf("| Origem: %-23s|\n", welcomeSocket.getInetAddress().getHostAddress());
+                    System.out.printf("| Porto: %-24d|\n", welcomeSocket.getPort());
+                    System.out.printf("| Ficheiro: %-21s|\n", _nomeFicheiro);
+                    System.out.println("+================================+");
                 
                     if( BARRAN){
 				
@@ -102,11 +113,24 @@ class TCPServer {
 			 
             }else if( _comando.equals("UPS") ){
                 
-                _nomeFicheiro = new String( getPalavra() );          
-                outToClient = new DataOutputStream( welcomeSocket.getOutputStream() );
+                _nomeFicheiro = new String( getPalavra() );       
+                   
+                try{   
+                    outToClient = new DataOutputStream( welcomeSocket.getOutputStream() );
+                }catch(IOException ex){
+                            System.err.println("Problema a criar o DataOutputStream");
+                            return;
+            }
+                
                 _comando = new String( getPalavra() );
                         
-                System.out.println("+==================+\n| Pedido: UPS      |\n| Origem:" + welcomeSocket.getInetAddress().getHostAddress() + " |\n| Porto: " + welcomeSocket.getPort()+"     |\n" +"| File: " + _nomeFicheiro +"    |\n+==================+");       
+      
+				    System.out.println("+================================+");
+                    System.out.printf("| Pedido: UPS                    |\n");
+                    System.out.printf("| Origem: %-23s|\n", welcomeSocket.getInetAddress().getHostAddress());
+                    System.out.printf("| Porto: %-24d|\n", welcomeSocket.getPort());
+                    System.out.printf("| ficheiro: %-21s|\n", _nomeFicheiro);
+                    System.out.println("+================================+");
 				        
                         try{
                         
@@ -116,7 +140,7 @@ class TCPServer {
                             BufferedOutputStream bos = new BufferedOutputStream(fos);
 
                             for(int k=0; k<tamanhoFicheiro; k++)
-                            bos.write( inFromClient.readByte() );
+                                bos.write( inFromClient.readByte() );
 
                             
 
@@ -141,15 +165,16 @@ class TCPServer {
 				        }catch(FileNotFoundException fnf){
                             outToClient.writeBytes("AWS nok\n");
                             System.out.println("Problema a criar Ficheiro\n" + "Problema TCPServer.java:89");
-                            outToClient.close();
-                            inFromClient.close();
+                           
+                        }catch(EOFException eoef){
+                            System.err.println("O stream do cliente foi interrompido, como tal o ficheiro não foi adicionado");
                         }catch(IOException ex){
                             outToClient.writeBytes("AWS nok\n");
                             System.out.println("Problema TCPServer.java:91");
-                            outToClient.close();
-                            inFromClient.close();
+                            
                         }               
             }
+       
    }	
 }
 
