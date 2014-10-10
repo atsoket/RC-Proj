@@ -49,6 +49,8 @@ public class UDPServer {
                        resposta += Integer.parseInt(aux[1]);/*aqui*/
                        resposta += " ";
                        resposta += listaConteudos.getNumFicheiros();
+                       listaSS.add(listaSS.get(0));
+                       listaSS.remove(0);
                        if( listaConteudos.getNumFicheiros() == 0)
                             resposta = "EOF\n";
                        else{
